@@ -3,16 +3,13 @@
 </div>
 <div class="ContentOfVideoChat">
   <div class="videoStreamContainer">
-    <div #userVideoStream class="userVideostream">
-
-    </div>
-    <div #guestVideoStream class="userVideostream">
-
-    </div>
+    <video #userVideoStream [autoplay]="true" [muted]="true" class="userVideostream"></video>
+    <video [autoplay]="true" [muted]="true" #guestVideoStream class="userVideostream"></video>
   </div>
   <div class="bouttns">
     <button>mute</button>
-    <button>close cam</button>
+    <button (click)="pauseLocalVideo()">stop cam</button>
+    <button (click)="startLocalVideo()">restart cam</button>
     <button>share screen </button>
   </div>
 </div>
