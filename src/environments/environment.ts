@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  wsEndpoint: 'ws://localhost::8000/ws/chat/2/',
+  wsEndpoint: 'ws://192.168.1.103:8000/ws/chat/2/',
   RTCPeerConfiguration: {
     iceServers: [
       {

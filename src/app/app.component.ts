@@ -65,8 +65,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       var types = 'offer'
       var data = Offer
       var coversation_id = 2
-      this.dataService.sendOfferAndResponceRTCConnection(types, data, coversation_id)
+      this.dataService.sendOfferAndResponceRTCConnection(types, data, coversation_id).subscribe(
+        res=>{
+          console.log(res)
+        }
+      )
     } catch (err) {
+      console.log("call")
       this.handleGetUserMediaErorr(err)
     }
   }
@@ -103,7 +108,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private handleGetUserMediaErorr(e: Error) {
     switch (e.name) {
       case 'NotFoundError':
-        alert('unable to open your call because no camera or audio found')
+        console.log('unable to open your call because no camera or audio found')
         break;
       case 'securityError':
         break;
@@ -111,7 +116,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         break;
       default:
         console.log(e);
-        alert('Error opening camera' + e.message);
+        console.log('Error opening camera' + e.message);
         break;
 
     }
@@ -155,6 +160,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.dataService.connect()
     this.dataService.messages.subscribe(
       msg=>{
+        console.log(msg.types)
         switch (msg.types) {
           case 'offer':
             this.handleOfferMessage(msg.message)
@@ -179,28 +185,39 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private handleOfferMessage(msg:RTCSessionDescriptionInit) {
     if(!this.peerConnection){
+      console.log("create peer")
       this.createPeerConnection()
 
     }
     if (!this.UserStream){
+      console.log("this.userStream")
       this.startLocalVideo()
     }
-    this.peerConnection.setLocalDescription(new RTCSessionDescription(msg))
-      .then(()=>{
-        this.userVideoStream.nativeElement.srcObject=this.UserStream
-        this.UserStream.getTracks().forEach(
-          track=> this.peerConnection.addTrack(track,this.UserStream)
-        )
-      }).then(()=>{
+    if (msg.sdp != null) {
+      console.log("msg.sdp")
+      this.peerConnection.setLocalDescription(new RTCSessionDescription(msg))
+        .then(() => {
+          this.userVideoStream.nativeElement.srcObject = this.UserStream
+          this.UserStream.getTracks().forEach(
+            track => this.peerConnection.addTrack(track, this.UserStream)
+          )
+        }).then(() => {
         return this.peerConnection.createAnswer()
-    }).then((answer)=>{
-      return this.peerConnection.setLocalDescription(answer)
-    }).then(()=>{
-      var types = 'answer'
-      var data = this.peerConnection.localDescription
-      var coversation_id = 2
-      this.dataService.sendOfferAndResponceRTCConnection(types, data, coversation_id)
-    }).catch(this.handleGetUserMediaErorr)
+      }).then((answer) => {
+        return this.peerConnection.setLocalDescription(answer)
+      }).then(() => {
+        var types = 'answer'
+        var data = this.peerConnection.localDescription
+        var coversation_id = 2
+        this.dataService.sendOfferAndResponceRTCConnection(types, data, coversation_id).subscribe(
+          res => {
+            console.log(res)
+          }
+        )
+      }).catch(
+        this.handleGetUserMediaErorr
+      )
+    }
   }
 
   private handleAnswerMessage(message:RTCSessionDescription):void {

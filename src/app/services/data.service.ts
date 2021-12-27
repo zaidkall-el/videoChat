@@ -6,7 +6,7 @@ import {webSocket} from "rxjs/webSocket";
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 export const WS_ENDPOINT = environment.wsEndpoint;
-var ROOT = 'localhost:8000'
+var ROOT = 'http://192.168.1.103:8000'
 export interface Message {
   types: string;
   message: any;
@@ -25,7 +25,6 @@ export class DataService {
 
   public connect(): void {
 
-    if (!this.socket || this.socket.closed) {
       this.socket = this.getNewWebSocket();
 
       this.socket.subscribe(
@@ -35,7 +34,7 @@ export class DataService {
           this.messagesSubject.next(msg);
         }
       );
-    }
+
   }
   getNewWebSocket(): WebSocketSubject<any> {
     return webSocket({
