@@ -1,0 +1,45 @@
+
+
+.title{
+  width: 100vw;
+  height: 5vw;
+  color: white;
+  background-color: mediumvioletred;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Abyssinica SIL",sans-serif;
+}
+.ContentOfVideoChat{
+  width: 100vw;
+  height: calc(100vh - 5vw);
+  background-color: darkgrey;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  .videoStreamContainer{
+    width: 100%;
+    height: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    .userVideostream{
+      width: 40%;
+      height: 100%;
+      background-color: white;
+      border-radius: 7px;
+      margin-top: 1vw;
+      margin-right: 2vw;
+    }
+  }
+
+  .bouttns{
+    width: 100%;
+    height: 5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+}
